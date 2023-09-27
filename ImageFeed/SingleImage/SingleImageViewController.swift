@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SingleImageViewController: UIViewController {
+final class SingleImageViewController: UIViewController {
     
     var image: UIImage! {
         didSet {
@@ -18,9 +18,8 @@ class SingleImageViewController: UIViewController {
         }
     }
     
-    @IBOutlet private var imageView: UIImageView!
-    @IBOutlet weak var scrollView: UIScrollView!
-    
+    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var scrollView: UIScrollView!
     @IBAction private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
     }
@@ -30,15 +29,12 @@ class SingleImageViewController: UIViewController {
         present(shareController, animated: true, completion: nil)
     }
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
         imageView.image = image
         rescaleAndCenterImageInScrollView(image: image)
-        
     }
     
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
@@ -63,5 +59,4 @@ extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         imageView
     }
-    
 }

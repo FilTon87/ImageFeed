@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
     
     private let avatarImageView = UIImageView()
     private let nameLabel = UILabel()
@@ -54,7 +54,7 @@ class ProfileViewController: UIViewController {
             loginNameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
         ])
     }
-
+    
     private func makeDescription() {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(descriptionLabel)
@@ -89,10 +89,5 @@ class ProfileViewController: UIViewController {
         makeLoginName()
         makeDescription()
         makeLogoutButton()
-    }
-    
-    
-    
-    
-    
+    }    
 }
