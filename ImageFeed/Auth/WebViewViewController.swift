@@ -15,14 +15,15 @@ protocol WebViewViewControllerDelegate: AnyObject {
 }
 
 final class WebViewViewController: UIViewController {
+    
+    //MARK: - IB Outlets
+    @IBOutlet weak private var progressView: UIProgressView!
+    @IBOutlet weak private var webView: WKWebView!
+    
+    //MARK: Public Properties
     weak var delegate: WebViewViewControllerDelegate?
     
-    @IBOutlet private var progressView: UIProgressView!
-    @IBOutlet private var webView: WKWebView!
-    @IBAction func didTapBackButton(_ sender: Any) {
-        delegate?.webViewViewControllerDidCandel(self)
-    }
-    
+    //MARK: View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         loadWebView()
@@ -44,6 +45,12 @@ final class WebViewViewController: UIViewController {
         webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
     }
     
+    //MARK: - IB Actions
+    @IBAction private func didTapBackButton(_ sender: Any) {
+        delegate?.webViewViewControllerDidCandel(self)
+    }
+    
+    //MARK: - Public Methods
     override func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
@@ -56,6 +63,7 @@ final class WebViewViewController: UIViewController {
             }
         }
     
+    //MARK: - Private Methods
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
@@ -78,6 +86,7 @@ private extension WebViewViewController {
     }
 }
 
+// MARK: - WKNavigationDelegate
 extension WebViewViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,

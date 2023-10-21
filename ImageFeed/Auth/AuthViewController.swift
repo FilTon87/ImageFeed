@@ -13,9 +13,14 @@ protocol AuthViewControllerDelegate: AnyObject {
 }
 
 final class AuthViewController: UIViewController {
+    
+    // MARK: - Public Properties
     weak var delegate: AuthViewControllerDelegate?
+    
+    // MARK: - Private Properties
     private let ShowWebViewSegueIdentifier = "ShowWebView"
     
+    // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == ShowWebViewSegueIdentifier {
             guard let webViewViewController = segue.destination as? WebViewViewController
@@ -27,6 +32,7 @@ final class AuthViewController: UIViewController {
     }
 }
 
+// MARK: - WebViewViewControllerDelegate
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewControllerDidCandel(_ vc: WebViewViewController) {
         dismiss(animated: true)

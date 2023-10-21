@@ -10,12 +10,24 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
+    //MARK: - Private Properties
     private let avatarImageView = UIImageView()
     private let nameLabel = UILabel()
     private let loginNameLabel = UILabel()
     private let descriptionLabel = UILabel()
     private let logoutButton = UIButton()
     
+    //MARK: - View Life Cycles
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        makeAvatar()
+        makeUserName()
+        makeLoginName()
+        makeDescription()
+        makeLogoutButton()
+    }
+    
+    //MARK: - Private Methods
     private func makeAvatar() {
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(avatarImageView)
@@ -81,13 +93,4 @@ final class ProfileViewController: UIViewController {
             logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        makeAvatar()
-        makeUserName()
-        makeLoginName()
-        makeDescription()
-        makeLogoutButton()
-    }    
 }

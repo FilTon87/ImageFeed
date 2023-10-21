@@ -9,8 +9,11 @@ import Foundation
 import UIKit
 
 final class SplashViewController: UIViewController {
+    
+    // MARK: - Private Properties
     private let ShowAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     
+    // MARK: - View Life Cycles
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -21,6 +24,7 @@ final class SplashViewController: UIViewController {
         }
     }
     
+    // MARK: - Public Methods
     func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration")}
         
@@ -47,6 +51,7 @@ extension SplashViewController {
     }
 }
 
+// MARK: - AuthViewControllerDelegate
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         dismiss(animated: true) { [weak self] in

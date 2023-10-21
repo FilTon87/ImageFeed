@@ -8,8 +8,11 @@
 import Foundation
 
 final class OAuth2Service {
+    //MARK: - Public Properties
     static let shared = OAuth2Service()
+
     
+    //MARK: - Private Properties
     private let urlSession = URLSession.shared
     
     private (set) var authToken: String? {
@@ -21,6 +24,10 @@ final class OAuth2Service {
         }
     }
     
+    //MARK: - Initializers
+    private init() {}
+    
+    //MARK: - Public Methods
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         let request = authTokenRequest(code: code)
         let task = object(for: request) { [weak self] result in
@@ -80,7 +87,6 @@ extension OAuth2Service {
 }
 
 // MARK: - HTTP Request
-
 extension URLRequest {
     static func makeHTTPRequest(
         path: String,
@@ -93,13 +99,6 @@ extension URLRequest {
 }
 
 // MARK: - Network Connection
-
-enum NetworkError: Error {
-    case httpStatusCode(Int)
-    case urlRequestError(Error)
-    case urlSessionError
-}
-
 extension URLSession {
     func data(
         for request: URLRequest,
