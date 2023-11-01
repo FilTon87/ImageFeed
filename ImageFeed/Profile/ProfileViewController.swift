@@ -16,6 +16,8 @@ final class ProfileViewController: UIViewController {
     private let loginNameLabel = UILabel()
     private let descriptionLabel = UILabel()
     private let logoutButton = UIButton()
+    private let profileService = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     //MARK: - View Life Cycles
     override func viewDidLoad() {
@@ -25,7 +27,19 @@ final class ProfileViewController: UIViewController {
         makeLoginName()
         makeDescription()
         makeLogoutButton()
-    }
+        updateProfileDetils(profile: profileService.profile!)
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.DidChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else {return}
+                self.updateAvatar()
+            }
+        updateAvatar()
+        }
+
     
     //MARK: - Private Methods
     private func makeAvatar() {
@@ -92,5 +106,19 @@ final class ProfileViewController: UIViewController {
             logoutButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
             logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
+    }
+    
+    private func updateProfileDetils (profile: ProfileService.Profile) {
+        nameLabel.text = profileService.profile?.name
+        loginNameLabel.text = profileService.profile?.userName
+        descriptionLabel.text = profileService.profile?.bio
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        //TODO обновить аватар спользуя Kingfisher
     }
 }
