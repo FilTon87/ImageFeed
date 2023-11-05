@@ -52,9 +52,9 @@ final class ProfileImageService {
 extension ProfileImageService {
     private func object(
         for request: URLRequest,
-completion: @escaping (Result<UserResult, Error>) -> Void) -> URLSessionTask {
+        completion: @escaping (Result<UserResult, Error>) -> Void) -> URLSessionTask {
             let decoder = JSONDecoder()
-            return urlSession.data(for: request) { (result: Result<Data, Error>) in
+            return urlSession.objectTask(for: request) { (result: Result<Data, Error>) in
                 let response = result.flatMap {data -> Result<UserResult, Error> in
                     Result { try decoder.decode(UserResult.self, from: data)}
                 }

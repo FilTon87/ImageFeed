@@ -19,7 +19,6 @@ final class SplashViewController: UIViewController {
     // MARK: - View Life Cycles
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         if OAuth2TokenStorage().token != nil {
             switchToTabBarController()
             fetchProfile(token: OAuth2TokenStorage().token!)
@@ -27,9 +26,9 @@ final class SplashViewController: UIViewController {
             performSegue(withIdentifier: ShowAuthenticationScreenSegueIdentifier, sender: nil)
         }
     }
-    
+
     // MARK: - Public Methods
-    func switchToTabBarController() {
+    private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration")}
         
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
@@ -47,7 +46,6 @@ extension SplashViewController {
             else {
                 fatalError("Faild to prepare for \(ShowAuthenticationScreenSegueIdentifier)")
             }
-            
             viewController.delegate = self }
         else {
             super.prepare(for: segue, sender: sender)
@@ -56,7 +54,7 @@ extension SplashViewController {
 }
 
 // MARK: - AuthViewControllerDelegate
-extension SplashViewController: AuthViewControllerDelegate {
+extension SplashViewController: AuthViewControllerDelegate {    
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
@@ -71,12 +69,11 @@ extension SplashViewController: AuthViewControllerDelegate {
             switch result {
             case .success(let token):
                 self.fetchProfile(token: token)
-                UIBlockingProgressHUD.dismiss()
             case .failure:
-                print ("Error: in SplashViewController")
-                UIBlockingProgressHUD.dismiss()
+                showAlert(message: "Не удалось войти в систему")
                 break
             }
+            UIBlockingProgressHUD.dismiss()
         }
     }
     
@@ -85,23 +82,32 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self = self else { return }
             switch result {
             case .success:
-                print("\(token)")
-                UIBlockingProgressHUD.dismiss()
                 self.switchToTabBarController()
                 guard let userName = profileService.profile?.userName else {return}
-                profileImageService.fetchProfileImageURL(userName: userName) { [weak self] result in
-                    guard let self = self else {return}
+                profileImageService.fetchProfileImageURL(userName: userName) { result in
                     switch result {
                     case .success(let avatarURL):
                         print ("\(avatarURL)")
                     case .failure:
-                        print ("Error: in fetchProfileImageURL")
+                        self.showAlert(message: "Не удалось получить аватар пользователя")
                     }
                 }
             case .failure:
-                print ("Error: in fetchProfile")
+                showAlert(message: "Не удалось загрузить профиль пользователя")
                 break
             }
+            UIBlockingProgressHUD.dismiss()
+        }
+    }
+    
+    private func showAlert(message: String) {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: message,
+            preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default))
+        DispatchQueue.main.async { [weak self] in
+        self?.present(alert, animated: true, completion: nil)
         }
     }
 }

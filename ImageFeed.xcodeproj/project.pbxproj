@@ -28,6 +28,7 @@
 		5D6E79402AEF89BD00005AC4 /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6E793F2AEF89BD00005AC4 /* ProfileImageService.swift */; };
 		5D86E3562AE3A674008D1197 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D86E3552AE3A674008D1197 /* NetworkError.swift */; };
 		5D87D08C2AE534360067B333 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 5D87D08B2AE534360067B333 /* ProgressHUD */; };
+		5DDAB5E42AF7EE5900B2BB29 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDAB5E32AF7EE5900B2BB29 /* URLSession.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		5D6E793D2AE90C6E00005AC4 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		5D6E793F2AEF89BD00005AC4 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		5D86E3552AE3A674008D1197 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		5DDAB5E32AF7EE5900B2BB29 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 				5D3EC7A82AC4245E007FD69B /* Constants.swift */,
 				5D86E3552AE3A674008D1197 /* NetworkError.swift */,
 				5D6E793B2AE8F8A400005AC4 /* UIBlockingProgressHUD.swift */,
+				5DDAB5E32AF7EE5900B2BB29 /* URLSession.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -250,6 +253,7 @@
 				5D1934F62AA31FE7000B608B /* AppDelegate.swift in Sources */,
 				5D3090DC2AC0027700933F1F /* UIColor+Extensions.swift in Sources */,
 				5D1A26172AB1AB4E00EE9DE8 /* SingleImageViewController.swift in Sources */,
+				5DDAB5E42AF7EE5900B2BB29 /* URLSession.swift in Sources */,
 				5D1934F82AA31FE7000B608B /* SceneDelegate.swift in Sources */,
 				5D372BE82ACBF92300C032C1 /* AuthViewController.swift in Sources */,
 				5D3EC7A92AC4245E007FD69B /* Constants.swift in Sources */,

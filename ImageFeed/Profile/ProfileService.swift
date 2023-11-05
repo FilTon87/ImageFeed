@@ -56,7 +56,7 @@ extension ProfileService {
         for request: URLRequest,
         completion: @escaping (Result<ProfileResult, Error>) -> Void) -> URLSessionTask {
             let decoder = JSONDecoder()
-            return urlSession.data(for: request) { (result: Result<Data, Error>) in
+            return urlSession.objectTask(for: request) { (result: Result<Data, Error>) in
                 let response = result.flatMap {data -> Result<ProfileResult, Error> in
                     Result { try decoder.decode(ProfileResult.self, from: data)}
                 }
