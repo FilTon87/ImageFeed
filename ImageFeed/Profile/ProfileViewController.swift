@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
@@ -17,6 +18,7 @@ final class ProfileViewController: UIViewController {
     private let descriptionLabel = UILabel()
     private let logoutButton = UIButton()
     private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     
     //MARK: - View Life Cycles
@@ -115,10 +117,15 @@ final class ProfileViewController: UIViewController {
     }
     
     private func updateAvatar() {
+        let cache = ImageCache.default
+        cache.clearMemoryCache()
+        cache.clearDiskCache()
         guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let profileImageURL = profileImageService.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
         //TODO обновить аватар спользуя Kingfisher
+        let processor = RoundCornerImageProcessor(cornerRadius: 12)
+        avatarImageView.kf.setImage(with: url, options: [.processor(processor)])
     }
 }

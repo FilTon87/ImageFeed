@@ -106,5 +106,3 @@ extension URLRequest {
             return request
         }
 }
-
-// MARK: - Network Connection
