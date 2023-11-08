@@ -10,7 +10,7 @@ import Foundation
 final class OAuth2Service {
     //MARK: - Public Properties
     static let shared = OAuth2Service()
-
+    
     
     //MARK: - Private Properties
     private let urlSession = URLSession.shared

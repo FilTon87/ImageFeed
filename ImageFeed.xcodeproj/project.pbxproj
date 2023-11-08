@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5D07E9AF2AFA232B0002CDED /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 5D07E9AE2AFA232B0002CDED /* Kingfisher */; };
 		5D07E9B22AFA328A0002CDED /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 5D07E9B12AFA328A0002CDED /* SwiftKeychainWrapper */; };
+		5D07E9B42AFA53340002CDED /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D07E9B32AFA53340002CDED /* TabBarController.swift */; };
 		5D0E50452AD667810059AE7A /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0E50442AD667810059AE7A /* OAuth2Service.swift */; };
 		5D0E50472AD69DEC0059AE7A /* OAuth2TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0E50462AD69DEC0059AE7A /* OAuth2TokenStorage.swift */; };
 		5D1934F62AA31FE7000B608B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1934F52AA31FE7000B608B /* AppDelegate.swift */; };
@@ -34,6 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5D07E9B32AFA53340002CDED /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		5D0E50442AD667810059AE7A /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
 		5D0E50462AD69DEC0059AE7A /* OAuth2TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2TokenStorage.swift; sourceTree = "<group>"; };
 		5D1934F22AA31FE7000B608B /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +106,7 @@
 				5D1934FE2AA31FEA000B608B /* Assets.xcassets */,
 				5D1935002AA31FEA000B608B /* LaunchScreen.storyboard */,
 				5D1935032AA31FEA000B608B /* Info.plist */,
+				5D07E9B32AFA53340002CDED /* TabBarController.swift */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 				5D19350A2AA35816000B608B /* ImagesListCell.swift in Sources */,
 				5D63DA172AB0970300BD3736 /* ProfileViewController.swift in Sources */,
 				5D1D69E52ADE6B3000090719 /* SplashViewController.swift in Sources */,
+				5D07E9B42AFA53340002CDED /* TabBarController.swift in Sources */,
 				5D6E793C2AE8F8A400005AC4 /* UIBlockingProgressHUD.swift in Sources */,
 				5D1934F62AA31FE7000B608B /* AppDelegate.swift in Sources */,
 				5D3090DC2AC0027700933F1F /* UIColor+Extensions.swift in Sources */,
@@ -424,8 +428,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ru.yandex.practicum.ImageFeed.filton87.ImageFeed;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "ru.yandex.practicum.ImageFeed.filton87.ImageFeed-21";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -456,8 +460,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ru.yandex.practicum.ImageFeed.filton87.ImageFeed;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "ru.yandex.practicum.ImageFeed.filton87.ImageFeed-21";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

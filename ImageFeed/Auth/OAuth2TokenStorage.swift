@@ -11,19 +11,12 @@ import SwiftKeychainWrapper
 final class OAuth2TokenStorage {
     var token: String? {
         get {
-//            return UserDefaults.standard.string(forKey: "authToken")
-            let token: String? = KeychainWrapper.standard.string(forKey: "authToken")
-            return token
+            KeychainWrapper.standard.string(forKey: "authToken")
         }
         set {
-            guard let token = token else { return }
-            let isSuccess = KeychainWrapper.standard.set(token, forKey: "authToken")
-            guard isSuccess else { return
-                //ошибка
-            }
-//            let defaults = UserDefaults.standard
-//            if let token = newValue {
-//                defaults.setValue(token, forKey: "authToken")
-            }
+            guard let newValue = newValue else { return }
+            let isSuccess = KeychainWrapper.standard.set(newValue, forKey: "authToken")
+            guard isSuccess else { return }
         }
     }
+}

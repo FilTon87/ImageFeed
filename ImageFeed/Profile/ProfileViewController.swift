@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Kingfisher
+import SwiftKeychainWrapper
 
 final class ProfileViewController: UIViewController {
     
@@ -29,6 +30,7 @@ final class ProfileViewController: UIViewController {
         makeLoginName()
         makeDescription()
         makeLogoutButton()
+        
         updateProfileDetils(profile: profileService.profile!)
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
@@ -40,8 +42,8 @@ final class ProfileViewController: UIViewController {
                 self.updateAvatar()
             }
         updateAvatar()
-        }
-
+    }
+    
     
     //MARK: - Private Methods
     private func makeAvatar() {
@@ -117,15 +119,14 @@ final class ProfileViewController: UIViewController {
     }
     
     private func updateAvatar() {
-        let cache = ImageCache.default
-        cache.clearMemoryCache()
-        cache.clearDiskCache()
         guard
             let profileImageURL = profileImageService.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
-        //TODO обновить аватар спользуя Kingfisher
         let processor = RoundCornerImageProcessor(cornerRadius: 12)
-        avatarImageView.kf.setImage(with: url, options: [.processor(processor)])
+        avatarImageView.kf.setImage(with: url, options: [.processor(processor), .cacheSerializer(FormatIndicatedCacheSerializer.png)])
+        let cache = ImageCache.default
+        cache.clearMemoryCache()
+        cache.clearDiskCache()
     }
 }

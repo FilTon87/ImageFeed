@@ -88,5 +88,4 @@ extension ProfileImageService {
             case avatarURL = "small"
         }
     }
-    
 }
