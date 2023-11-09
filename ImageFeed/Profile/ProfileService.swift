@@ -4,8 +4,6 @@
 //
 //  Created by Anton Filipchuk on 25.10.2023.
 //
-
-import Foundation
 import UIKit
 import ProgressHUD
 
@@ -43,6 +41,7 @@ final class ProfileService {
                 self.task = nil
             case .failure(let error):
                 completion(.failure(error))
+                self.task = nil
             }
         }
         self.task = task
@@ -83,7 +82,7 @@ extension ProfileService {
             case userName = "username"
             case firstName = "first_name"
             case lastName = "last_name"
-            case bio = "bio"
+            case bio
         }
     }
     

@@ -16,13 +16,14 @@ final class OAuth2Service {
     private let urlSession = URLSession.shared
     private var lastCode: String?
     private var task: URLSessionTask?
+    private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     
     private (set) var authToken: String? {
         get {
-            return OAuth2TokenStorage().token
+            return oAuth2TokenStorage.token
         }
         set {
-            OAuth2TokenStorage().token = newValue
+            oAuth2TokenStorage.token = newValue
         }
     }
     
@@ -42,8 +43,8 @@ final class OAuth2Service {
             case .success(let body):
                 let authToken = body.accessToken
                 self.authToken = authToken
-                completion(.success(authToken))
                 self.task = nil
+                completion(.success(authToken))
             case .failure(let error):
                 completion(.failure(error))
                 self.lastCode = nil

@@ -4,17 +4,16 @@
 //
 //  Created by Anton Filipchuk on 17.10.2023.
 //
-
-import Foundation
 import UIKit
 
 final class SplashViewController: UIViewController {
     
     // MARK: - Private Properties
     private let logoImageView = UIImageView()
-    private let ShowAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
+//    private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
+    private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     private var wasChecked: Bool = false
     
     // MARK: - View Life Cycles
@@ -32,9 +31,8 @@ final class SplashViewController: UIViewController {
     private func checkAuthStatus() {
         guard !wasChecked else { return }
         wasChecked = true
-        if OAuth2TokenStorage().token != nil {
-            fetchProfile(token: OAuth2TokenStorage().token!)
-            switchToTabBarController()
+        if let token = oAuth2TokenStorage.token {
+            fetchProfile(token: token)
         } else {
             switchToAuthViewController()
         }
@@ -80,7 +78,8 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
     
     private func fetchOAuthToken(_ code: String) {
-        OAuth2Service.shared.fetchOAuthToken(code) { result in
+        OAuth2Service.shared.fetchOAuthToken(code) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let token):
                 self.fetchProfile(token: token)
@@ -92,7 +91,8 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
     
     private func fetchProfile(token: String) {
-        profileService.fetchProfile(token) { result in
+        profileService.fetchProfile(token) { [weak self] result in
+            guard let self = self else {return}
             switch result {
             case .success:
                 guard let userName = self.profileService.profile?.userName else {return}
@@ -100,7 +100,8 @@ extension SplashViewController: AuthViewControllerDelegate {
                     switch result {
                     case .success:
                         DispatchQueue.main.async {
-                            self.switchToTabBarController() }
+                            self.switchToTabBarController()
+                        }
                     case .failure:
                         self.showAlert(message: "Не удалось получить аватар пользователя")
                     }

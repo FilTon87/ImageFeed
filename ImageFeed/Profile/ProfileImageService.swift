@@ -4,20 +4,19 @@
 //
 //  Created by Anton Filipchuk on 30.10.2023.
 //
-
-import Foundation
 import UIKit
 
 final class ProfileImageService {
     
     //MARK: - Public Properties
     static let shared = ProfileImageService()
-    static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
+    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     
     //MARK: - Private Properties
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
     private (set) var avatarURL: String?
+    private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     
     //MARK: - Initializers
     private init() {}
@@ -33,14 +32,15 @@ final class ProfileImageService {
             case .success(let body):
                 let avatarURL = body.profileImage.avatarURL
                 self.avatarURL = avatarURL
-                completion(.success(avatarURL))
                 NotificationCenter.default
                     .post(
-                        name: ProfileImageService.DidChangeNotification,
+                        name: ProfileImageService.didChangeNotification,
                         object: self,
                         userInfo: ["URL": avatarURL])
                 self.task = nil
+                completion(.success(avatarURL))
             case .failure(let error):
+                self.task = nil
                 completion(.failure(error))
             }
         }
@@ -63,7 +63,7 @@ extension ProfileImageService {
         }
     
     private func avatarURLRequest(userName: String) -> URLRequest {
-        let token = OAuth2TokenStorage().token ?? ""
+        let token = oAuth2TokenStorage.token ?? ""
         var request = URLRequest.makeHTTPRequest(
             path: "/users"
             + "/\(userName)",

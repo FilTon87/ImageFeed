@@ -5,7 +5,6 @@
 //  Created by Anton Filipchuk on 27.09.2023.
 //
 
-import Foundation
 import UIKit
 
 let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"

@@ -5,10 +5,9 @@
 //  Created by Anton Filipchuk on 12.09.2023.
 //
 
-import Foundation
 import UIKit
 import Kingfisher
-import SwiftKeychainWrapper
+//import SwiftKeychainWrapper
 
 final class ProfileViewController: UIViewController {
     
@@ -25,16 +24,21 @@ final class ProfileViewController: UIViewController {
     //MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypBlack
         makeAvatar()
         makeUserName()
         makeLoginName()
         makeDescription()
         makeLogoutButton()
         
-        updateProfileDetils(profile: profileService.profile!)
+        guard let profile = profileService.profile else { 
+            assertionFailure("no profile")
+            return }
+        updateProfileDetils(profile: profile)
+        
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
-                forName: ProfileImageService.DidChangeNotification,
+                forName: ProfileImageService.didChangeNotification,
                 object: nil,
                 queue: .main
             ) { [weak self] _ in
