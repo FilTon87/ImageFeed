@@ -4,8 +4,6 @@
 //
 //  Created by Anton Filipchuk on 03.10.2023.
 //
-
-import Foundation
 import UIKit
 import WebKit
 
@@ -23,45 +21,28 @@ final class WebViewViewController: UIViewController {
     //MARK: Public Properties
     weak var delegate: WebViewViewControllerDelegate?
     
+    //MARK: - Private Properties
+    private var estimatedProgressObservation: NSKeyValueObservation?
+    
     //MARK: View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         loadWebView()
         webView.navigationDelegate = self
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
-        updateProgress()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
+        
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else {return}
+                 self.updateProgress()
+             })
     }
     
     //MARK: - IB Actions
     @IBAction private func didTapBackButton(_ sender: Any) {
         delegate?.webViewViewControllerDidCandel(self)
     }
-    
-    //MARK: - Public Methods
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey : Any]?,
-        context: UnsafeMutableRawPointer?) {
-            if keyPath == #keyPath(WKWebView.estimatedProgress) {
-                updateProgress()
-            } else {
-                super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-            }
-        }
     
     //MARK: - Private Methods
     private func updateProgress() {
@@ -94,6 +75,7 @@ extension WebViewViewController: WKNavigationDelegate {
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             if let code = code(from: navigationAction) {
                 delegate?.webViewViewController(self, didAuthenticateWithCode: code)
+                UIBlockingProgressHUD.show()
                 decisionHandler(.cancel)
             } else {
                 decisionHandler(.allow)

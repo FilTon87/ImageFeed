@@ -5,8 +5,9 @@
 //  Created by Anton Filipchuk on 12.09.2023.
 //
 
-import Foundation
 import UIKit
+import Kingfisher
+//import SwiftKeychainWrapper
 
 final class ProfileViewController: UIViewController {
     
@@ -16,16 +17,37 @@ final class ProfileViewController: UIViewController {
     private let loginNameLabel = UILabel()
     private let descriptionLabel = UILabel()
     private let logoutButton = UIButton()
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     //MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypBlack
         makeAvatar()
         makeUserName()
         makeLoginName()
         makeDescription()
         makeLogoutButton()
+        
+        guard let profile = profileService.profile else { 
+            assertionFailure("no profile")
+            return }
+        updateProfileDetils(profile: profile)
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else {return}
+                self.updateAvatar()
+            }
+        updateAvatar()
     }
+    
     
     //MARK: - Private Methods
     private func makeAvatar() {
@@ -92,5 +114,23 @@ final class ProfileViewController: UIViewController {
             logoutButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
             logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
+    }
+    
+    private func updateProfileDetils (profile: ProfileService.Profile) {
+        nameLabel.text = profileService.profile?.name
+        loginNameLabel.text = profileService.profile?.userName
+        descriptionLabel.text = profileService.profile?.bio
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = profileImageService.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 12)
+        avatarImageView.kf.setImage(with: url, options: [.processor(processor), .cacheSerializer(FormatIndicatedCacheSerializer.png)])
+        let cache = ImageCache.default
+        cache.clearMemoryCache()
+        cache.clearDiskCache()
     }
 }
