@@ -14,6 +14,9 @@ final class ImagesListViewController: UIViewController {
     //MARK: - Private Properties
     private let photosName: [String] = Array(0..<20).map{"\($0)"}
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
+    private let imagesListService = ImagesListService.shared
+    private var imagesListServiceObserver: NSObjectProtocol?
+    
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -67,6 +70,31 @@ extension ImagesListViewController: UITableViewDataSource {
         configCell(for: imageListCell, with: indexPath)
         
         return imageListCell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    let photos = imagesListService.photos
+        if indexPath.row + 1 == photos.count {
+            imagesListServiceObserver = NotificationCenter.default
+                .addObserver(
+                    forName: ImagesListService.didChangeNotification,
+                    object: nil,
+                    queue: .main
+                ) { [weak self] _ in
+                    guard let self = self else {return}
+                        print("test 1")
+                }
+            
+            imagesListService.fetchPhotosNextPage() { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success():
+                    print("test")
+                case .failure():
+                    print("error")
+                }
+            }
+        }
     }
 }
 
