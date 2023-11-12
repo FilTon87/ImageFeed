@@ -71,31 +71,6 @@ extension ImagesListViewController: UITableViewDataSource {
         
         return imageListCell
     }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    let photos = imagesListService.photos
-        if indexPath.row + 1 == photos.count {
-            imagesListServiceObserver = NotificationCenter.default
-                .addObserver(
-                    forName: ImagesListService.didChangeNotification,
-                    object: nil,
-                    queue: .main
-                ) { [weak self] _ in
-                    guard let self = self else {return}
-                        print("test 1")
-                }
-            
-            imagesListService.fetchPhotosNextPage() { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success():
-                    print("test")
-                case .failure():
-                    print("error")
-                }
-            }
-        }
-    }
 }
 
 //MARK: - UITableViewDelegate
@@ -112,6 +87,13 @@ extension ImagesListViewController: UITableViewDelegate {
         let scale = imageViewWidth / imageWidth
         let cellHight = image.size.height * scale + imageInsets.top + imageInsets.bottom
         return cellHight
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    let photos = imagesListService.photos
+        if indexPath.row + 1 == photos.count {
+            imagesListService.fetchPhotosNextPage()
+        }
     }
     
 }

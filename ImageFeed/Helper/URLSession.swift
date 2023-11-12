@@ -14,6 +14,7 @@ extension URLSession {
             let fulfillCompletion: (Result<T, Error>) -> Void = { result in
                 DispatchQueue.main.async {
                     completion(result)
+                    print("->RESULT: \(result)")
                 }
             }
             let task = dataTask(with: request, completionHandler: {data, response, error in
@@ -23,8 +24,10 @@ extension URLSession {
                 {
                     if 200 ..< 300 ~= statusCode {
                         fulfillCompletion(.success(data as! T))
+                        print("->STATUS_CODE: \(statusCode)")
                     } else {
                         fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
+                        print("->STATUS_CODE: \(statusCode)")
                     }
                 } else if let error = error {
                     fulfillCompletion(.failure(NetworkError.urlRequestError(error)))
@@ -32,6 +35,7 @@ extension URLSession {
                     fulfillCompletion(.failure(NetworkError.urlSessionError))
                 }
             })
+
             task.resume()
             return task
         }

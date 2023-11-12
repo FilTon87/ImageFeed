@@ -15,6 +15,7 @@ final class ImagesListService {
     //MARK: - Private Properties
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
+    private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     private var lastLoadedPage: Int?
     private (set) var photos: [Photo] = []
     
@@ -22,7 +23,7 @@ final class ImagesListService {
     private init() {}
     
     //MARK: - Public Methods
-    func fetchPhotosNextPage (_ completion: @escaping (Result<Array<Any>, Error>) -> Void) {
+    func fetchPhotosNextPage () {
         assert(Thread.isMainThread)
         task?.cancel()
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
@@ -31,27 +32,30 @@ final class ImagesListService {
             guard let self = self else {return}
             switch result {
             case .success(let body):
-                let photo = Photo(
-                    id: body.id,
- //                   size: <#T##CGSize#>,
-                    createdAt: body.createdAt,
-                    welcomeDescription: body.welcomeDescription,
-                    thumbImageURL: body.urls.thumbImageURL,
-                    largeImageURL: body.urls.largeImageURL,
-                    isLiked: body.isLiked)
-                photos.append(photo)
+                print("\(body)")
+                body.forEach { photoResult in self.photos.append(
+                    Photo(
+                        id: photoResult.id,
+                        size: CGSize(width: photoResult.width, height: photoResult.height),
+                        createdAt: photoResult.createdAt,
+                        welcomeDescription: photoResult.welcomeDescription,
+                        thumbImageURL: photoResult.urls.thumbImageURL,
+                        largeImageURL: photoResult.urls.largeImageURL,
+                        isLiked: photoResult.isLiked))
+                }
                 self.photos = photos
+                lastLoadedPage! += 1
                 NotificationCenter.default
                     .post(
                         name: ImagesListService.didChangeNotification,
                         object: self,
                         userInfo: ["photos": photos])
                 self.task = nil
-                lastLoadedPage! += 1
-                completion(.success(photos))
-            case .failure(let error):
+ //               completion(.success(photos))
+            case .failure:
+                assertionFailure("no photos")
                 self.task = nil
-                completion(.failure(error))
+ //               completion(.failure(error))
             }
         }
         self.task = task
@@ -61,31 +65,36 @@ final class ImagesListService {
 
 extension ImagesListService {
     private func photoRequest(nextPage: Int) -> URLRequest {
+        let token = oAuth2TokenStorage.token ?? ""
+        print("->TOKEN:\(token)")
         var request = URLRequest.makeHTTPRequest(
             path: "/photos"
             + "?page=\(nextPage)"
             + "?per_page=10",
             httpMethod: "GET",
             baseURL: DefaultBaseURL)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        print("->REQUEST: \(request)")
         return request
     }
     
     private func object(
         for request: URLRequest,
-        completion: @escaping (Result<PhotoResult, Error>) -> Void) -> URLSessionTask {
+        completion: @escaping (Result<[PhotoResult], Error>) -> Void) -> URLSessionTask {
             let decoder = JSONDecoder()
             return urlSession.objectTask(for: request) { (result: Result<Data, Error>) in
-                let response = result.flatMap {data -> Result<PhotoResult, Error> in
-                    Result { try decoder.decode(PhotoResult.self, from: data)}
+                let response = result.flatMap {data -> Result<[PhotoResult], Error> in
+                    Result { try decoder.decode([PhotoResult].self, from: data)}
                 }
                 completion(response)
+                print("->RESPONSE: \(response)")
             }
         }
 
     private struct PhotoResult: Codable {
         let id: String
-        let width: String
-        let height: String
+        let width: CGFloat
+        let height: CGFloat
         let createdAt: Date?
         let welcomeDescription: String?
         let urls: urlsResult
@@ -114,7 +123,7 @@ extension ImagesListService {
     
      struct Photo {
         let id: String
-//        let size: CGSize
+        let size: CGSize
         let createdAt: Date?
         let welcomeDescription: String?
         let thumbImageURL: String
