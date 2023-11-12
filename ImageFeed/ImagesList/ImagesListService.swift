@@ -32,7 +32,6 @@ final class ImagesListService {
             guard let self = self else {return}
             switch result {
             case .success(let body):
-                print("\(body)")
                 body.forEach { photoResult in self.photos.append(
                     Photo(
                         id: photoResult.id,
@@ -44,18 +43,17 @@ final class ImagesListService {
                         isLiked: photoResult.isLiked))
                 }
                 self.photos = photos
-                lastLoadedPage! += 1
                 NotificationCenter.default
                     .post(
                         name: ImagesListService.didChangeNotification,
                         object: self,
                         userInfo: ["photos": photos])
                 self.task = nil
- //               completion(.success(photos))
+                //               completion(.success(photos))
             case .failure:
                 assertionFailure("no photos")
                 self.task = nil
- //               completion(.failure(error))
+                //               completion(.failure(error))
             }
         }
         self.task = task
@@ -70,7 +68,7 @@ extension ImagesListService {
         var request = URLRequest.makeHTTPRequest(
             path: "/photos"
             + "?page=\(nextPage)"
-            + "?per_page=10",
+            + "&per_page=10",
             httpMethod: "GET",
             baseURL: DefaultBaseURL)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -86,16 +84,17 @@ extension ImagesListService {
                 let response = result.flatMap {data -> Result<[PhotoResult], Error> in
                     Result { try decoder.decode([PhotoResult].self, from: data)}
                 }
-                completion(response)
                 print("->RESPONSE: \(response)")
+                completion(response)
+                
             }
         }
-
+    
     private struct PhotoResult: Codable {
         let id: String
         let width: CGFloat
         let height: CGFloat
-        let createdAt: Date?
+        let createdAt: String?
         let welcomeDescription: String?
         let urls: urlsResult
         let isLiked: Bool
@@ -121,10 +120,10 @@ extension ImagesListService {
         }
     }
     
-     struct Photo {
+    struct Photo {
         let id: String
         let size: CGSize
-        let createdAt: Date?
+        let createdAt: String?
         let welcomeDescription: String?
         let thumbImageURL: String
         let largeImageURL: String

@@ -24,6 +24,7 @@ extension URLSession {
                 {
                     if 200 ..< 300 ~= statusCode {
                         fulfillCompletion(.success(data as! T))
+                        print("->DATA: \(data)")
                         print("->STATUS_CODE: \(statusCode)")
                     } else {
                         fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
