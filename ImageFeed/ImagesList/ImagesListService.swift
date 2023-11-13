@@ -29,7 +29,7 @@ final class ImagesListService {
         task?.cancel()
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         let request = photoRequest(nextPage: nextPage)
-        let task = object(for: request) { [weak self] result in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self = self else {return}
             switch result {
             case .success(let body):
@@ -59,6 +59,37 @@ final class ImagesListService {
         self.task = task
         task.resume()
     }
+    
+    func changeLike (id: String, isLiked: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        task?.cancel()
+        let request = if isLiked == true { delteLikeRequest(id: id) } else { makeLikeRequest(id: id) }
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<LikeResult, Error>) in
+            guard let self = self else { return }
+            switch result {
+            case .success(let body):
+                if let index = self.photos.firstIndex(where: { $0.id == id}) {
+                    let photo = self.photos[index]
+                    let newPhoto = Photo(
+                        id: photo.id,
+                        size: photo.size,
+                        createdAt: photo.createdAt,
+                        welcomeDescription: photo.welcomeDescription,
+                        thumbImageURL: photo.thumbImageURL,
+                        largeImageURL: photo.largeImageURL,
+                        isLiked: !photo.isLiked)
+                    self.photos[index] = newPhoto
+                }
+                self.task = nil
+ //               completion(.success())
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+        self.task = task
+        task.resume()
+    }
+    
 }
 
 extension ImagesListService {
@@ -74,19 +105,30 @@ extension ImagesListService {
         return request
     }
     
-    private func object(
-        for request: URLRequest,
-        completion: @escaping (Result<[PhotoResult], Error>) -> Void) -> URLSessionTask {
-            let decoder = JSONDecoder()
-            return urlSession.objectTask(for: request) { (result: Result<Data, Error>) in
-                let response = result.flatMap {data -> Result<[PhotoResult], Error> in
-                    Result { try decoder.decode([PhotoResult].self, from: data)}
-                }
-                completion(response)
-                print("->RESPONSE: \(response)")
-            }
-        }
-
+    private func delteLikeRequest(id: String) -> URLRequest {
+        let token = oAuth2TokenStorage.token ?? ""
+        var request = URLRequest.makeHTTPRequest(
+            path: "/photos"
+            + "/\(id)"
+            + "/like",
+            httpMethod: "DELETE",
+            baseURL: DefaultBaseURL)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
+    }
+    
+    private func makeLikeRequest(id: String) -> URLRequest {
+        let token = oAuth2TokenStorage.token ?? ""
+        var request = URLRequest.makeHTTPRequest(
+            path: "/photos"
+            + "/\(id)"
+            + "/like",
+            httpMethod: "POST",
+            baseURL: DefaultBaseURL)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
+    }
+        
     private struct PhotoResult: Codable {
         let id: String
         let width: CGFloat
@@ -117,7 +159,7 @@ extension ImagesListService {
         }
     }
     
-     struct Photo {
+    struct Photo {
         let id: String
         let size: CGSize
         let createdAt: Date?
@@ -125,5 +167,9 @@ extension ImagesListService {
         let thumbImageURL: String
         let largeImageURL: String
         let isLiked: Bool
+    }
+    
+    private struct LikeResult: Codable {
+        let photo: PhotoResult?
     }
 }

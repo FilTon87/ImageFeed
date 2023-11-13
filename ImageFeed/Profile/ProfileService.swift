@@ -26,7 +26,7 @@ final class ProfileService {
         assert(Thread.isMainThread)
         task?.cancel()
         let request = profileRequest(token: token)
-        let task = object(for: request) { [weak self] result in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self = self else {return}
             switch result {
             case .success(let body):
@@ -51,17 +51,17 @@ final class ProfileService {
 
 
 extension ProfileService {
-    private func object(
-        for request: URLRequest,
-        completion: @escaping (Result<ProfileResult, Error>) -> Void) -> URLSessionTask {
-            let decoder = JSONDecoder()
-            return urlSession.objectTask(for: request) { (result: Result<Data, Error>) in
-                let response = result.flatMap {data -> Result<ProfileResult, Error> in
-                    Result { try decoder.decode(ProfileResult.self, from: data)}
-                }
-                completion(response)
-            }
-        }
+//    private func object(
+//        for request: URLRequest,
+//        completion: @escaping (Result<ProfileResult, Error>) -> Void) -> URLSessionTask {
+//            let decoder = JSONDecoder()
+//            return urlSession.objectTask(for: request) { (result: Result<Data, Error>) in
+//                let response = result.flatMap {data -> Result<ProfileResult, Error> in
+//                    Result { try decoder.decode(ProfileResult.self, from: data)}
+//                }
+//                completion(response)
+//            }
+//        }
     
     private func profileRequest(token: String) -> URLRequest {
         var request = URLRequest.makeHTTPRequest(
