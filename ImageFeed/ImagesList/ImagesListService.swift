@@ -18,6 +18,7 @@ final class ImagesListService {
     private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     private var lastLoadedPage: Int?
     private (set) var photos: [Photo] = []
+    private lazy var dateFormatter = ISO8601DateFormatter()
     
     //MARK: - Initializers
     private init() {}
@@ -32,30 +33,27 @@ final class ImagesListService {
             guard let self = self else {return}
             switch result {
             case .success(let body):
-                print("\(body)")
                 body.forEach { photoResult in self.photos.append(
                     Photo(
                         id: photoResult.id,
                         size: CGSize(width: photoResult.width, height: photoResult.height),
-                        createdAt: photoResult.createdAt,
+                        createdAt: self.dateFormatter.date(from: photoResult.createdAt ?? ""),
                         welcomeDescription: photoResult.welcomeDescription,
                         thumbImageURL: photoResult.urls.thumbImageURL,
                         largeImageURL: photoResult.urls.largeImageURL,
                         isLiked: photoResult.isLiked))
                 }
-                self.photos = photos
-                lastLoadedPage! += 1
+                self.lastLoadedPage = nextPage
                 NotificationCenter.default
                     .post(
                         name: ImagesListService.didChangeNotification,
                         object: self,
                         userInfo: ["photos": photos])
+                print("->PHOTOS: \(photos)")
                 self.task = nil
- //               completion(.success(photos))
             case .failure:
                 assertionFailure("no photos")
                 self.task = nil
- //               completion(.failure(error))
             }
         }
         self.task = task
@@ -66,7 +64,6 @@ final class ImagesListService {
 extension ImagesListService {
     private func photoRequest(nextPage: Int) -> URLRequest {
         let token = oAuth2TokenStorage.token ?? ""
-        print("->TOKEN:\(token)")
         var request = URLRequest.makeHTTPRequest(
             path: "/photos"
             + "?page=\(nextPage)"
@@ -74,7 +71,6 @@ extension ImagesListService {
             httpMethod: "GET",
             baseURL: DefaultBaseURL)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        print("->REQUEST: \(request)")
         return request
     }
     
@@ -95,7 +91,7 @@ extension ImagesListService {
         let id: String
         let width: CGFloat
         let height: CGFloat
-        let createdAt: Date?
+        let createdAt: String?
         let welcomeDescription: String?
         let urls: urlsResult
         let isLiked: Bool
