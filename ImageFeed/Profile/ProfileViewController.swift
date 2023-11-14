@@ -18,6 +18,7 @@ final class ProfileViewController: UIViewController {
     private let logoutButton = UIButton()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
+    private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     
     //MARK: - View Life Cycles
@@ -106,6 +107,7 @@ final class ProfileViewController: UIViewController {
         view.addSubview(logoutButton)
         logoutButton.setImage(UIImage(named: "Exit"), for: .normal)
         logoutButton.tintColor = .red
+        logoutButton.addTarget(self, action: #selector(logout), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             logoutButton.widthAnchor.constraint(equalToConstant: 44),
@@ -131,5 +133,17 @@ final class ProfileViewController: UIViewController {
         let cache = ImageCache.default
         cache.clearMemoryCache()
         cache.clearDiskCache()
+    }
+    
+    @objc func logout() {
+        oAuth2TokenStorage.removeToken()
+        switchToSplashScreen()
+        SplashViewController().wasChecked = false
+    }
+    
+    private func switchToSplashScreen() {
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration")}
+        let splashScreenViewController = SplashViewController()
+        window.rootViewController = splashScreenViewController
     }
 }

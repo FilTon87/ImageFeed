@@ -100,7 +100,6 @@ final class ImagesListViewController: UIViewController {
 //MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let photos = imagesListService.photos
         return photos.count
     }
     

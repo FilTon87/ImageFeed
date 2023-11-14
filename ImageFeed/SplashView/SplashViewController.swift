@@ -13,7 +13,7 @@ final class SplashViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private let oAuth2TokenStorage = OAuth2TokenStorage.shared
-    private var wasChecked: Bool = false
+    var wasChecked: Bool = false
     
     // MARK: - View Life Cycles
     override func viewDidLoad() {
