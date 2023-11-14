@@ -49,7 +49,6 @@ final class ImagesListService {
                         name: ImagesListService.didChangeNotification,
                         object: self,
                         userInfo: ["photos": photos])
-                print("->PHOTOS: \(photos)")
                 self.task = nil
             case .failure:
                 assertionFailure("no photos")
@@ -60,14 +59,14 @@ final class ImagesListService {
         task.resume()
     }
     
-    func changeLike (id: String, isLiked: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+    func changeLike (id: String, isLiked: Bool, _ completion: @escaping (Result<[Photo], Error>) -> Void) {
         assert(Thread.isMainThread)
         task?.cancel()
-        let request = if isLiked == true { delteLikeRequest(id: id) } else { makeLikeRequest(id: id) }
+        let request = if isLiked == false { delteLikeRequest(id: id) } else { makeLikeRequest(id: id) }
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<LikeResult, Error>) in
             guard let self = self else { return }
             switch result {
-            case .success(let body):
+            case .success(_):
                 if let index = self.photos.firstIndex(where: { $0.id == id}) {
                     let photo = self.photos[index]
                     let newPhoto = Photo(
@@ -81,7 +80,7 @@ final class ImagesListService {
                     self.photos[index] = newPhoto
                 }
                 self.task = nil
- //               completion(.success())
+                completion(.success(photos))
             case .failure(let error):
                 completion(.failure(error))
             }

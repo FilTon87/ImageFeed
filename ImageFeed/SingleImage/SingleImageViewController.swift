@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class SingleImageViewController: UIViewController {
     
@@ -14,21 +15,18 @@ final class SingleImageViewController: UIViewController {
     @IBOutlet private weak var scrollView: UIScrollView!
     
     //MARK: - Public Properties
-    var image: UIImage! {
-        didSet {
-            guard isViewLoaded else { return }
-            imageView.image = image
-            rescaleAndCenterImageInScrollView(image: image)
+    var fullImageURL: URL! {
+            didSet {
+                guard isViewLoaded else { return }
+            }
         }
-    }
     
     //MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
-        imageView.image = image
-        rescaleAndCenterImageInScrollView(image: image)
+        loadImage()
     }
     
     //MARK: - IB Action
@@ -37,9 +35,12 @@ final class SingleImageViewController: UIViewController {
     }
     
     @IBAction private func didTapShareButton(_ sender: UIButton) {
-        let shareController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        let shareController = UIActivityViewController(activityItems: [imageView.image as Any], applicationActivities: nil)
         present(shareController, animated: true, completion: nil)
     }
+}
+
+extension SingleImageViewController {
     
     //MARK: - Private Methods
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
@@ -57,6 +58,20 @@ final class SingleImageViewController: UIViewController {
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+    }
+    
+    private func loadImage() {
+        UIBlockingProgressHUD.show()
+        imageView.kf.setImage(with: fullImageURL) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            guard let self = self else { return }
+            switch result {
+            case .success(let imageResult):
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                print("ERROR")
+            }
+        }
     }
 }
 
