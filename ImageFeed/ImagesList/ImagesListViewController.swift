@@ -149,9 +149,22 @@ extension ImagesListViewController: ImagesListCellDelegate {
                 UIBlockingProgressHUD.dismiss()
             case .failure(_):
                 UIBlockingProgressHUD.dismiss()
-                //TODO: показать ошибку UIAlertController
+                self.showAlert()
             }
         }
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Не удалось поставить лайк",
+            preferredStyle: .alert)
+        alert.addAction(UIAlertAction(
+            title: "Ok",
+            style: .default) { [weak self] _ in
+                self?.dismiss(animated: true)
+            })
+        self.present(alert, animated: true)
     }
 }
 

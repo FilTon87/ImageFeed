@@ -107,7 +107,7 @@ final class ProfileViewController: UIViewController {
         view.addSubview(logoutButton)
         logoutButton.setImage(UIImage(named: "Exit"), for: .normal)
         logoutButton.tintColor = .red
-        logoutButton.addTarget(self, action: #selector(logout), for: .touchUpInside)
+        logoutButton.addTarget(self, action: #selector(logoutAlert), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             logoutButton.widthAnchor.constraint(equalToConstant: 44),
@@ -135,10 +135,27 @@ final class ProfileViewController: UIViewController {
         cache.clearDiskCache()
     }
     
-    @objc func logout() {
+    @objc private func logoutAlert() {
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert)
+        alert.addAction(UIAlertAction(
+            title: "Да",
+            style: .default) { [weak self] _ in
+                self?.logout()
+            })
+        alert.addAction(UIAlertAction(
+            title: "Нет",
+            style: .default) { [weak self] _ in
+                self?.dismiss(animated: true)
+                })
+        self.present(alert, animated: true)
+    }
+    
+ private func logout() {
         oAuth2TokenStorage.removeToken()
         switchToSplashScreen()
-        SplashViewController().wasChecked = false
     }
     
     private func switchToSplashScreen() {
@@ -146,4 +163,6 @@ final class ProfileViewController: UIViewController {
         let splashScreenViewController = SplashViewController()
         window.rootViewController = splashScreenViewController
     }
+    
+    
 }

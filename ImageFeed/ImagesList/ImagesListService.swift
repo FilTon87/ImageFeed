@@ -24,7 +24,7 @@ final class ImagesListService {
     private init() {}
     
     //MARK: - Public Methods
-    func fetchPhotosNextPage () {
+    func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
         task?.cancel()
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
@@ -134,7 +134,7 @@ extension ImagesListService {
         let height: CGFloat
         let createdAt: String?
         let welcomeDescription: String?
-        let urls: urlsResult
+        let urls: UrlsResult
         let isLiked: Bool
         
         enum CodingKeys: String, CodingKey {
@@ -148,7 +148,7 @@ extension ImagesListService {
         }
     }
     
-    struct urlsResult: Codable {
+    struct UrlsResult: Codable {
         let thumbImageURL: String
         let largeImageURL: String
         
