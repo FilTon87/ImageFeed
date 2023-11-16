@@ -17,7 +17,7 @@ final class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
     
 
-    @IBAction func likeButtonCliked(_ sender: Any) {
+    @IBAction private func likeButtonCliked(_ sender: Any) {
         delegate?.imageListCellDidTapLike(self)
     }
     

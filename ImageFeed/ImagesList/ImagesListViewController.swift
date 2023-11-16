@@ -16,7 +16,6 @@ final class ImagesListViewController: UIViewController {
     @IBOutlet private var tableView: UITableView!
     
     //MARK: - Private Properties
-    //private let photosName: [String] = Array(0..<20).map{"\($0)"}
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private let imagesListService = ImagesListService.shared
     private var imagesListServiceObserver: NSObjectProtocol?
@@ -48,7 +47,11 @@ final class ImagesListViewController: UIViewController {
         if segue.identifier == ShowSingleImageSegueIdentifier {
             let viewController = segue.destination as! SingleImageViewController
             let indexPath = sender as! IndexPath
-            let fullImageURL = URL(string: photos[indexPath.row].largeImageURL)!
+            guard let fullImageURL = URL(string: photos[indexPath.row].largeImageURL) else
+            {
+                assertionFailure("No fullImageURL")
+                return
+            }
             viewController.fullImageURL = fullImageURL
         } else {
             super.prepare(for: segue, sender: sender)
@@ -65,7 +68,7 @@ final class ImagesListViewController: UIViewController {
             return
         }
         cell.cellImage.kf.indicatorType = .activity
-        cell.cellImage.kf.setImage(with: url, placeholder: placeholder) 
+        cell.cellImage.kf.setImage(with: url, placeholder: placeholder)
         { [weak self] _ in
             guard let self = self else { return }
             self.tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -77,7 +80,7 @@ final class ImagesListViewController: UIViewController {
             return
         }
         cell.dateLabel.text = dateFormatter.string(from: date)
-
+        
         
         if photos[indexPath.row].isLiked == true {cell.likeButton.setImage(UIImage(named: "LikeActive"), for: .normal)} else {cell.likeButton.setImage(UIImage(named: "LikeNoActive"), for: .normal)}
     }
@@ -141,16 +144,16 @@ extension ImagesListViewController: ImagesListCellDelegate {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let photo = photos[indexPath.row]
         UIBlockingProgressHUD.show()
-        imagesListService.changeLike(id: photo.id, isLiked: !photo.isLiked) { result in
+        imagesListService.changeLike(id: photo.id, isLiked: !photo.isLiked) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(_):
                 self.photos = self.imagesListService.photos
                 cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
-                UIBlockingProgressHUD.dismiss()
             case .failure(_):
-                UIBlockingProgressHUD.dismiss()
                 self.showAlert()
             }
+            UIBlockingProgressHUD.dismiss()
         }
     }
     
