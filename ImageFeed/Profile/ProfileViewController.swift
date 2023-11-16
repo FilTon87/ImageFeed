@@ -7,7 +7,6 @@
 
 import UIKit
 import Kingfisher
-//import SwiftKeychainWrapper
 
 final class ProfileViewController: UIViewController {
     
@@ -19,6 +18,7 @@ final class ProfileViewController: UIViewController {
     private let logoutButton = UIButton()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
+    private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     
     //MARK: - View Life Cycles
@@ -107,6 +107,7 @@ final class ProfileViewController: UIViewController {
         view.addSubview(logoutButton)
         logoutButton.setImage(UIImage(named: "Exit"), for: .normal)
         logoutButton.tintColor = .red
+        logoutButton.addTarget(self, action: #selector(logoutAlert), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             logoutButton.widthAnchor.constraint(equalToConstant: 44),
@@ -133,4 +134,35 @@ final class ProfileViewController: UIViewController {
         cache.clearMemoryCache()
         cache.clearDiskCache()
     }
+    
+    @objc private func logoutAlert() {
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert)
+        alert.addAction(UIAlertAction(
+            title: "Да",
+            style: .default) { [weak self] _ in
+                self?.logout()
+            })
+        alert.addAction(UIAlertAction(
+            title: "Нет",
+            style: .default) { [weak self] _ in
+                self?.dismiss(animated: true)
+                })
+        self.present(alert, animated: true)
+    }
+    
+ private func logout() {
+        oAuth2TokenStorage.removeToken()
+        switchToSplashScreen()
+    }
+    
+    private func switchToSplashScreen() {
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration")}
+        let splashScreenViewController = SplashViewController()
+        window.rootViewController = splashScreenViewController
+    }
+    
+    
 }

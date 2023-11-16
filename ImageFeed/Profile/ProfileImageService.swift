@@ -26,7 +26,7 @@ final class ProfileImageService {
         assert(Thread.isMainThread)
         task?.cancel()
         let request = avatarURLRequest(userName: userName)
-        let task = object(for: request) { [weak self] result in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self = self else {return}
             switch result {
             case .success(let body):
@@ -50,17 +50,6 @@ final class ProfileImageService {
 }
 
 extension ProfileImageService {
-    private func object(
-        for request: URLRequest,
-        completion: @escaping (Result<UserResult, Error>) -> Void) -> URLSessionTask {
-            let decoder = JSONDecoder()
-            return urlSession.objectTask(for: request) { (result: Result<Data, Error>) in
-                let response = result.flatMap {data -> Result<UserResult, Error> in
-                    Result { try decoder.decode(UserResult.self, from: data)}
-                }
-                completion(response)
-            }
-        }
     
     private func avatarURLRequest(userName: String) -> URLRequest {
         let token = oAuth2TokenStorage.token ?? ""
