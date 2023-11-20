@@ -51,7 +51,7 @@ final class ImagesListService {
                         userInfo: ["photos": photos])
                 self.task = nil
             case .failure:
-                assertionFailure("no photos")
+ //               assertionFailure("no photos")
                 self.task = nil
             }
         }
