@@ -37,7 +37,7 @@ final class WebViewTests: XCTestCase {
         presenter.viewDidLoad()
         
         //then
-        XCTAssertTrue(viewController.loadRequestCallsed)
+        XCTAssertTrue(viewController.loadRequestCalled)
     }
     
     func testProgressVisibleWhenLessThenOne() {

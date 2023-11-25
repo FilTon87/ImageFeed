@@ -10,10 +10,10 @@ import ImageFeed
 
 final class WebViewViewControllerSpy: WebViewViewControllerProtocol {
     var presenter: ImageFeed.WebViewPresenterProtocol?
-    var loadRequestCallsed: Bool = false
+    var loadRequestCalled: Bool = false
     
     func load(request: URLRequest) {
-        loadRequestCallsed = true
+        loadRequestCalled = true
     }
     
     func setProgressValue(_ newValue: Float) { }

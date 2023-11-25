@@ -10,9 +10,10 @@ import ImageFeed
 
 final class ProfileViewControllerSpy: ProfileViewControllerProtocol {
     var presenter: ImageFeed.ProfileViewPresenterProtocol?
+    var updateAvatarCalled: Bool = false
     
     func updateAvatar() {
-        <#code#>
+        updateAvatarCalled = true
     }
     
     

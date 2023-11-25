@@ -13,7 +13,7 @@ public protocol ProfileViewControllerProtocol: AnyObject {
     func updateAvatar()
 }
 
-final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
+final class ProfileViewController: UIViewController {
     var presenter: ProfileViewPresenterProtocol?
     
     //MARK: - Private Properties
@@ -23,8 +23,6 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     private let descriptionLabel = UILabel()
     private let logoutButton = UIButton()
     private let profileService = ProfileService.shared
-    private let profileImageService = ProfileImageService.shared
-    private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     private var alertPresenter: AlertPresenterProtocol?
     
     //MARK: - View Life Cycles
@@ -36,21 +34,24 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         
         updateProfileDetils(profile: profileService.profile)
         
-        presenter = ProfileViewPresenter()
-        presenter?.view = self
-        presenter?.profileObserver()
+        avatarObserver()
     }
     
     func updateAvatar() {
-        guard
-            let profileImageURL = profileImageService.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
+        guard let avatar = presenter?.reciveAvatarURL() else { return }
         let processor = RoundCornerImageProcessor(cornerRadius: 12)
-        avatarImageView.kf.setImage(with: url, options: [.processor(processor), .cacheSerializer(FormatIndicatedCacheSerializer.png)])
+        avatarImageView.kf.setImage(with: avatar, options: [.processor(processor), .cacheSerializer(FormatIndicatedCacheSerializer.png)])
         let cache = ImageCache.default
         cache.clearMemoryCache()
         cache.clearDiskCache()
+    }
+}
+
+extension ProfileViewController: ProfileViewControllerProtocol {
+    func avatarObserver() {
+        presenter = ProfileViewPresenter()
+        presenter?.view = self
+        presenter?.profileObserver()
     }
 }
 
@@ -138,9 +139,9 @@ private extension ProfileViewController {
         guard let profile = profileService.profile else {
             assertionFailure("no profile")
             return }
-        nameLabel.text = profileService.profile?.name
-        loginNameLabel.text = profileService.profile?.userName
-        descriptionLabel.text = profileService.profile?.bio
+        nameLabel.text = profile.name
+        loginNameLabel.text = "@\(profile.userName)"
+        descriptionLabel.text = profile.bio
     }
     
     @objc func logoutAlert() {
@@ -151,7 +152,7 @@ private extension ProfileViewController {
                 buttonOneText: "Да",
                 completionOne: { [weak self] in
                     guard let self = self else { return }
-                    self.exit()},
+                    presenter?.exitProfile()},
                 buttonTwoText: "Нет",
                 completionTwo: { [weak self] in
                     guard let self = self else { return }
@@ -159,16 +160,5 @@ private extension ProfileViewController {
                 })
             self.alertPresenter?.showAlert(alertModel: alert)
         }
-    }
-    
-    private func exit() {
-        oAuth2TokenStorage.removeToken()
-        switchToSplashScreen()
-    }
-    
-    private func switchToSplashScreen() {
-        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration")}
-        let splashScreenViewController = SplashViewController()
-        window.rootViewController = splashScreenViewController
     }
 }

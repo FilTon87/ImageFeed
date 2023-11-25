@@ -50,6 +50,9 @@
 		5D8A35D32B0CCDA900E88A8D /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8A35D22B0CCDA900E88A8D /* AlertModel.swift */; };
 		5D8A35D52B0CDBD300E88A8D /* ProfileViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8A35D42B0CDBD300E88A8D /* ProfileViewPresenter.swift */; };
 		5DC4522D2B11F2E6007BF60A /* ImagesListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4522C2B11F2E6007BF60A /* ImagesListPresenter.swift */; };
+		5DC452302B11F906007BF60A /* ImagesListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4522F2B11F906007BF60A /* ImagesListTests.swift */; };
+		5DC452342B11FD4F007BF60A /* ImagesListPresenterSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC452332B11FD4F007BF60A /* ImagesListPresenterSpy.swift */; };
+		5DC452382B121B44007BF60A /* Switcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC452372B121B44007BF60A /* Switcher.swift */; };
 		5DDAB5E42AF7EE5900B2BB29 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDAB5E32AF7EE5900B2BB29 /* URLSession.swift */; };
 		5DE9E8032AFE4FB300CA34BB /* ImagesListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE9E8022AFE4FB300CA34BB /* ImagesListService.swift */; };
 /* End PBXBuildFile section */
@@ -116,6 +119,9 @@
 		5D8A35D22B0CCDA900E88A8D /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
 		5D8A35D42B0CDBD300E88A8D /* ProfileViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewPresenter.swift; sourceTree = "<group>"; };
 		5DC4522C2B11F2E6007BF60A /* ImagesListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListPresenter.swift; sourceTree = "<group>"; };
+		5DC4522F2B11F906007BF60A /* ImagesListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListTests.swift; sourceTree = "<group>"; };
+		5DC452332B11FD4F007BF60A /* ImagesListPresenterSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListPresenterSpy.swift; sourceTree = "<group>"; };
+		5DC452372B121B44007BF60A /* Switcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switcher.swift; sourceTree = "<group>"; };
 		5DDAB5E32AF7EE5900B2BB29 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 		5DE9E8022AFE4FB300CA34BB /* ImagesListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -226,6 +232,7 @@
 				5D86E3552AE3A674008D1197 /* NetworkError.swift */,
 				5D6E793B2AE8F8A400005AC4 /* UIBlockingProgressHUD.swift */,
 				5DDAB5E32AF7EE5900B2BB29 /* URLSession.swift */,
+				5DC452372B121B44007BF60A /* Switcher.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -282,6 +289,7 @@
 		5D8A35AB2B0B2B3500E88A8D /* ImageFeedTests */ = {
 			isa = PBXGroup;
 			children = (
+				5DC4522E2B11F8E3007BF60A /* ImagesList */,
 				5D7B78202B0F91160083AC80 /* ProfileView */,
 				5D7B781F2B0F90FC0083AC80 /* WebView */,
 			);
@@ -318,6 +326,15 @@
 				5DC4522C2B11F2E6007BF60A /* ImagesListPresenter.swift */,
 			);
 			path = Presenter;
+			sourceTree = "<group>";
+		};
+		5DC4522E2B11F8E3007BF60A /* ImagesList */ = {
+			isa = PBXGroup;
+			children = (
+				5DC4522F2B11F906007BF60A /* ImagesListTests.swift */,
+				5DC452332B11FD4F007BF60A /* ImagesListPresenterSpy.swift */,
+			);
+			path = ImagesList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -479,6 +496,7 @@
 				5D1D69E52ADE6B3000090719 /* SplashViewController.swift in Sources */,
 				5D07E9B42AFA53340002CDED /* TabBarController.swift in Sources */,
 				5D6E793C2AE8F8A400005AC4 /* UIBlockingProgressHUD.swift in Sources */,
+				5DC452382B121B44007BF60A /* Switcher.swift in Sources */,
 				5D1934F62AA31FE7000B608B /* AppDelegate.swift in Sources */,
 				5D7B781E2B0E340B0083AC80 /* AlertPresenterProtocol.swift in Sources */,
 				5D3090DC2AC0027700933F1F /* UIColor+Extensions.swift in Sources */,
@@ -502,7 +520,9 @@
 				5D7B78222B0F91310083AC80 /* ProfileViewTests.swift in Sources */,
 				5D8A35AD2B0B2B3500E88A8D /* WebViewTests.swift in Sources */,
 				5D7B78262B0F98F90083AC80 /* ProfileViewPresenterSpy.swift in Sources */,
+				5DC452342B11FD4F007BF60A /* ImagesListPresenterSpy.swift in Sources */,
 				5D8A35B62B0B2EB500E88A8D /* WebViewViewControllerSpy.swift in Sources */,
+				5DC452302B11F906007BF60A /* ImagesListTests.swift in Sources */,
 				5D8A35B42B0B2C8700E88A8D /* WebViewPresenterSpy.swift in Sources */,
 				5D7B78242B0F98E60083AC80 /* ProfileViewControllerSpy.swift in Sources */,
 			);

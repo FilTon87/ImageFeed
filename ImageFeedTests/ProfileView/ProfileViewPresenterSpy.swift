@@ -9,10 +9,14 @@ import Foundation
 import ImageFeed
 
 final class ProfileViewPresenterSpy: ProfileViewPresenterProtocol {
-    var view: ImageFeed.ProfileViewControllerProtocol?
+    var view: ProfileViewControllerProtocol?
+    var reciveAvatarURLCalled: Bool = false
     
-    func profileObserver() {
-        <#code#>
+    func profileObserver() { }
+    func exitProfile() { }
+    func reciveAvatarURL() -> URL? {
+        reciveAvatarURLCalled = true
+        return nil        
     }
     
     
