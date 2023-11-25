@@ -8,9 +8,13 @@
 import UIKit
 import Kingfisher
 
+public protocol ImagesListViewControllerProtocol: AnyObject {
+    var presenter: ImagesListPresenterProtocol? { get set }
+}
+
 final class ImagesListViewController: UIViewController {
     //MARK: - Public Properties
-    var photos: [ImagesListService.Photo] = []
+    var photos: [Photo] = []
     
     //MARK: - IB Outlets
     @IBOutlet private var tableView: UITableView!
@@ -19,6 +23,7 @@ final class ImagesListViewController: UIViewController {
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private let imagesListService = ImagesListService.shared
     private var imagesListServiceObserver: NSObjectProtocol?
+    private var alertPresenter: AlertPresenterProtocol?
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
@@ -29,6 +34,7 @@ final class ImagesListViewController: UIViewController {
     //MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        alertPresenter = AlertPresenter(delegate: self)
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         imagesListServiceObserver = NotificationCenter.default
             .addObserver(
@@ -100,6 +106,11 @@ final class ImagesListViewController: UIViewController {
     }
 }
 
+//extension ImagesListViewController: ImagesListViewControllerProtocol {
+//    var presenter: ImagesListPresenterProtocol?
+//
+//}
+
 //MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -158,16 +169,15 @@ extension ImagesListViewController: ImagesListCellDelegate {
     }
     
     private func showAlert() {
-        let alert = UIAlertController(
+        let alert = AlertModel(
             title: "Что-то пошло не так(",
             message: "Не удалось поставить лайк",
-            preferredStyle: .alert)
-        alert.addAction(UIAlertAction(
-            title: "Ok",
-            style: .default) { [weak self] _ in
-                self?.dismiss(animated: true)
-            })
-        self.present(alert, animated: true)
+            buttonOneText: "Ok",
+            completionOne: { [weak self] in
+                guard let self = self else { return }
+                self.dismiss(animated: true)},
+        buttonTwoText: nil)
+        self.alertPresenter?.showAlert(alertModel: alert)
     }
 }
 

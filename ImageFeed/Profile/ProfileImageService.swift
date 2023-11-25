@@ -61,20 +61,4 @@ extension ProfileImageService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
-    
-    private struct UserResult: Codable {
-        let profileImage: profileImage
-        
-        enum CodingKeys: String, CodingKey {
-            case profileImage = "profile_image"
-        }
-    }
-    
-    struct profileImage: Codable {
-        let avatarURL: String
-        
-        enum CodingKeys: String, CodingKey {
-            case avatarURL = "small"
-        }
-    }
 }

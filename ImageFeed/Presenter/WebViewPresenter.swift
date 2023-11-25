@@ -5,7 +5,7 @@
 //  Created by Anton Filipchuk on 18.11.2023.
 //
 
-import UIKit
+import Foundation
 
 public protocol WebViewPresenterProtocol {
     var view: WebViewViewControllerProtocol? { get set }
@@ -30,8 +30,7 @@ final class WebViewPresenter: WebViewPresenterProtocol {
         view?.load(request: request)
         didUpdateProgressValue(0)
     }
-    
-    
+        
     func didUpdateProgressValue(_ newValue: Double) {
         let newProgressValue = Float(newValue)
         view?.setProgressValue(newProgressValue)
