@@ -16,7 +16,7 @@ public protocol ProfileViewPresenterProtocol {
 }
 
 final class ProfileViewPresenter: ProfileViewPresenterProtocol {
-    var view: ProfileViewControllerProtocol?
+    weak var view: ProfileViewControllerProtocol?
     
     private var profileImageServiceObserver: NSObjectProtocol?
     private let oAuth2TokenStorage = OAuth2TokenStorage.shared

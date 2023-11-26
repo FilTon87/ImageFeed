@@ -30,7 +30,6 @@
 		5D6E793C2AE8F8A400005AC4 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6E793B2AE8F8A400005AC4 /* UIBlockingProgressHUD.swift */; };
 		5D6E793E2AE90C6E00005AC4 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6E793D2AE90C6E00005AC4 /* ProfileService.swift */; };
 		5D6E79402AEF89BD00005AC4 /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6E793F2AEF89BD00005AC4 /* ProfileImageService.swift */; };
-		5D7B781E2B0E340B0083AC80 /* AlertPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7B781D2B0E340B0083AC80 /* AlertPresenterProtocol.swift */; };
 		5D7B78222B0F91310083AC80 /* ProfileViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7B78212B0F91310083AC80 /* ProfileViewTests.swift */; };
 		5D7B78242B0F98E60083AC80 /* ProfileViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7B78232B0F98E60083AC80 /* ProfileViewControllerSpy.swift */; };
 		5D7B78262B0F98F90083AC80 /* ProfileViewPresenterSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7B78252B0F98F90083AC80 /* ProfileViewPresenterSpy.swift */; };
@@ -98,7 +97,6 @@
 		5D6E793B2AE8F8A400005AC4 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 		5D6E793D2AE90C6E00005AC4 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		5D6E793F2AEF89BD00005AC4 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
-		5D7B781D2B0E340B0083AC80 /* AlertPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenterProtocol.swift; sourceTree = "<group>"; };
 		5D7B78212B0F91310083AC80 /* ProfileViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewTests.swift; sourceTree = "<group>"; };
 		5D7B78232B0F98E60083AC80 /* ProfileViewControllerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewControllerSpy.swift; sourceTree = "<group>"; };
 		5D7B78252B0F98F90083AC80 /* ProfileViewPresenterSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewPresenterSpy.swift; sourceTree = "<group>"; };
@@ -184,7 +182,6 @@
 				5D19350B2AA358A6000B608B /* ImagesList */,
 				5D3090DA2AC0020000933F1F /* SingleImage */,
 				5D63DA182AB09DBE00BD3736 /* Profile */,
-				5D7B781C2B0E33F70083AC80 /* Alert */,
 				5D3090DD2AC0027D00933F1F /* Helper */,
 				5D07E9B32AFA53340002CDED /* TabBarController.swift */,
 				5D1934F52AA31FE7000B608B /* AppDelegate.swift */,
@@ -256,14 +253,6 @@
 				5D6E793F2AEF89BD00005AC4 /* ProfileImageService.swift */,
 			);
 			path = Profile;
-			sourceTree = "<group>";
-		};
-		5D7B781C2B0E33F70083AC80 /* Alert */ = {
-			isa = PBXGroup;
-			children = (
-				5D7B781D2B0E340B0083AC80 /* AlertPresenterProtocol.swift */,
-			);
-			path = Alert;
 			sourceTree = "<group>";
 		};
 		5D7B781F2B0F90FC0083AC80 /* WebView */ = {
@@ -498,7 +487,6 @@
 				5D6E793C2AE8F8A400005AC4 /* UIBlockingProgressHUD.swift in Sources */,
 				5DC452382B121B44007BF60A /* Switcher.swift in Sources */,
 				5D1934F62AA31FE7000B608B /* AppDelegate.swift in Sources */,
-				5D7B781E2B0E340B0083AC80 /* AlertPresenterProtocol.swift in Sources */,
 				5D3090DC2AC0027700933F1F /* UIColor+Extensions.swift in Sources */,
 				5D1A26172AB1AB4E00EE9DE8 /* SingleImageViewController.swift in Sources */,
 				5D5C079F2B08A65F00EF8007 /* WebViewPresenter.swift in Sources */,

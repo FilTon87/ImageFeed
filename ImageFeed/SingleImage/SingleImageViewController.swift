@@ -14,9 +14,6 @@ final class SingleImageViewController: UIViewController {
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var scrollView: UIScrollView!
     
-    //MARK: - Private Properties
-    private var alertPresenter: AlertPresenterProtocol?
-    
     //MARK: - Public Properties
     var fullImageURL: URL! {
         didSet {
@@ -27,7 +24,6 @@ final class SingleImageViewController: UIViewController {
     //MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        alertPresenter = AlertPresenter(delegate: self)
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
         loadImage()
@@ -91,7 +87,7 @@ extension SingleImageViewController {
                 guard let self = self else { return }
                 self.didTapBackButton()
             })
-        self.alertPresenter?.showAlert(alertModel: alert)
+        AlertPresenter.showAlert(viewController: self, alertModel: alert)
     }
 }
 

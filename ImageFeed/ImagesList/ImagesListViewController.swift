@@ -24,7 +24,6 @@ final class ImagesListViewController: UIViewController {
     //MARK: - Private Properties
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private let imagesListService = ImagesListService.shared
-    private var alertPresenter: AlertPresenterProtocol?
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
@@ -35,7 +34,6 @@ final class ImagesListViewController: UIViewController {
     //MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        alertPresenter = AlertPresenter(delegate: self)
         presenter = ImagesListPresenter()
         presenter?.view = self
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
@@ -172,7 +170,7 @@ extension ImagesListViewController: ImagesListCellDelegate {
                 guard let self = self else { return }
                 self.dismiss(animated: true)},
         buttonTwoText: nil)
-        self.alertPresenter?.showAlert(alertModel: alert)
+        AlertPresenter.showAlert(viewController: self, alertModel: alert)
     }
 }
 

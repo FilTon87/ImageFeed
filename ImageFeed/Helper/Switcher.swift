@@ -12,7 +12,9 @@ final class Switcher {
     private init() {}
     
     func switchToSplashScreen() {
-        guard let window = UIApplication.shared.windows.first else {fatalError("Invalid Configuration")}
+        guard let window = UIApplication.shared.windows.first
+        else {assertionFailure("Invalid Configuration")
+        return }
         let splashScreenViewController = SplashViewController()
         window.rootViewController = splashScreenViewController
     }

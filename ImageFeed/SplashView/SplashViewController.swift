@@ -14,12 +14,10 @@ final class SplashViewController: UIViewController {
     private let profileImageService = ProfileImageService.shared
     private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     private var wasChecked: Bool = false
-    private var alertPresenter: AlertPresenterProtocol?
     
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        alertPresenter = AlertPresenter(delegate: self)
         makeSplashScreen()
     }
     
@@ -124,6 +122,6 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.switchToAuthViewController()
             },
             buttonTwoText: nil)
-        self.alertPresenter?.showAlert(alertModel: alert)
+        AlertPresenter.showAlert(viewController: self, alertModel: alert)
     }
 }

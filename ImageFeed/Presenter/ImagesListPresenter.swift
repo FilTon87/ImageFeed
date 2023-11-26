@@ -11,13 +11,12 @@ public protocol ImagesListPresenterProtocol {
     var view: ImagesListViewControllerProtocol? { get set }
     func loadImages()
     func tapLike(id: String, isLiked: Bool, _ completion: @escaping (Result<Void, Error>) -> Void)
-    
 }
 
 final class ImagesListPresenter: ImagesListPresenterProtocol {
+    weak var view: ImagesListViewControllerProtocol?
+    
     private let imagesListService = ImagesListService.shared
-
-    var view: ImagesListViewControllerProtocol?
     private var imagesListServiceObserver: NSObjectProtocol?
     
     func loadImages() {
@@ -44,7 +43,5 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
             }
         }
     }
-    
-    
 }
 

@@ -23,14 +23,14 @@ final class ProfileViewController: UIViewController {
     private let descriptionLabel = UILabel()
     private let logoutButton = UIButton()
     private let profileService = ProfileService.shared
-    private var alertPresenter: AlertPresenterProtocol?
+//    private var alertPresenter: AlertPresenter?
     
     //MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         setupProfileView()
         
-        alertPresenter = AlertPresenter(delegate: self)
+ //       alertPresenter = AlertPresenter()
         
         updateProfileDetils(profile: profileService.profile)
         
@@ -71,6 +71,7 @@ private extension ProfileViewController {
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(avatarImageView)
         avatarImageView.image = UIImage(named: "userPhoto")
+        avatarImageView.layer.cornerRadius = 35
         
         NSLayoutConstraint.activate([
             avatarImageView.widthAnchor.constraint(equalToConstant: 70),
@@ -158,7 +159,7 @@ private extension ProfileViewController {
                     guard let self = self else { return }
                     self.dismiss(animated: true)
                 })
-            self.alertPresenter?.showAlert(alertModel: alert)
+            AlertPresenter.showAlert(viewController: self, alertModel: alert)
         }
     }
 }
