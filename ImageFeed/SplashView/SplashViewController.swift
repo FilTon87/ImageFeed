@@ -113,15 +113,15 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
     
     private func showAlert(message: String) {
-        let alert = UIAlertController(
+        let alert = AlertModel(
             title: "Что-то пошло не так(",
             message: message,
-            preferredStyle: .alert)
-        alert.addAction(UIAlertAction(
-            title: "Ok",
-            style: .default) { [weak self] _ in
-                self?.switchToAuthViewController()
-            })
-        self.present(alert, animated: true)
+            buttonOneText: "Ok",
+            completionOne: { [weak self] in
+                guard let self = self else { return }
+                self.switchToAuthViewController()
+            },
+            buttonTwoText: nil)
+        AlertPresenter.showAlert(viewController: self, alertModel: alert)
     }
 }

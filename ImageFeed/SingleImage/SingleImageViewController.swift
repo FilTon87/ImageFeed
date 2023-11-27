@@ -16,10 +16,10 @@ final class SingleImageViewController: UIViewController {
     
     //MARK: - Public Properties
     var fullImageURL: URL! {
-            didSet {
-                guard isViewLoaded else { return }
-            }
+        didSet {
+            guard isViewLoaded else { return }
         }
+    }
     
     //MARK: - View Life Cycles
     override func viewDidLoad() {
@@ -69,26 +69,25 @@ extension SingleImageViewController {
             case .success(let imageResult):
                 self.rescaleAndCenterImageInScrollView(image: imageResult.image)
             case .failure:
-                self.showError()
+                showError()
             }
         }
     }
     
     private func showError() {
-        let alert = UIAlertController(
+        let alert = AlertModel(
             title: "Что-то пошло не так(",
             message: "Что-то пошло не так. Попробовать еще раз?",
-            preferredStyle: .alert)
-        alert.addAction(UIAlertAction(
-            title: "Повторить",
-            style: .default) { [weak self] _ in
-                self?.loadImage()
+            buttonOneText: "Повторить",
+            completionOne: { [weak self] in
+                guard let self = self else { return }
+                self.loadImage()},
+            buttonTwoText: "Не надо",
+            completionTwo: { [weak self] in
+                guard let self = self else { return }
+                self.didTapBackButton()
             })
-        alert.addAction(UIAlertAction(
-            title: "Не надо",
-            style: .default) { [weak self] _ in
-                                self?.didTapBackButton()})
-        self.present(alert, animated: true)
+        AlertPresenter.showAlert(viewController: self, alertModel: alert)
     }
 }
 

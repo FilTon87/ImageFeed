@@ -28,6 +28,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QMp-EH-3di">
                                 <rect key="frame" x="16" y="640" width="343" height="48"/>
                                 <color key="backgroundColor" name="YP White"/>
+                                <accessibility key="accessibilityConfiguration" identifier="Authenticate"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="3h3-JH-PWl"/>
                                 </constraints>
@@ -66,7 +67,7 @@
         <!--Web View View Controller-->
         <scene sceneID="nxg-Ci-g7D">
             <objects>
-                <viewController id="HoJ-0Z-1Ej" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewViewController" id="HoJ-0Z-1Ej" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="g9G-Zy-yBT">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -78,6 +79,9 @@
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
                                     <wkPreferences key="preferences"/>
                                 </wkWebViewConfiguration>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="AccessibilityIdentifier" value="UnsplashWebView"/>
+                                </userDefinedRuntimeAttributes>
                             </wkWebView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oXv-PQ-v2e">
                                 <rect key="frame" x="8" y="11" width="24" height="24"/>
@@ -163,7 +167,7 @@
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cui-gR-ubr">
                                                     <rect key="frame" x="317" y="4" width="42" height="42"/>
-                                                    <accessibility key="accessibilityConfiguration" label="Like Button"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="LikeButton" label="Like Button"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="42" id="IJ7-cL-0KD"/>
                                                         <constraint firstAttribute="width" constant="42" id="Xro-mQ-Q4i"/>
@@ -279,6 +283,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kCj-9X-B39" userLabel="BackButton">
                                 <rect key="frame" x="15" y="8" width="48" height="48"/>
+                                <accessibility key="accessibilityConfiguration" identifier="BackButton"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="48" id="Bgf-qH-ElP"/>
                                     <constraint firstAttribute="height" constant="48" id="MdU-0H-Ldb"/>

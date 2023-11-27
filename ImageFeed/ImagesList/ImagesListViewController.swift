@@ -8,17 +8,22 @@
 import UIKit
 import Kingfisher
 
+public protocol ImagesListViewControllerProtocol: AnyObject {
+    var presenter: ImagesListPresenterProtocol? { get set }
+    func updateTableViewAnimated()
+}
+
 final class ImagesListViewController: UIViewController {
     //MARK: - Public Properties
-    var photos: [ImagesListService.Photo] = []
-    
+    var photos: [Photo] = []
+    var presenter: ImagesListPresenterProtocol?
+
     //MARK: - IB Outlets
     @IBOutlet private var tableView: UITableView!
     
     //MARK: - Private Properties
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private let imagesListService = ImagesListService.shared
-    private var imagesListServiceObserver: NSObjectProtocol?
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
@@ -29,17 +34,10 @@ final class ImagesListViewController: UIViewController {
     //MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter = ImagesListPresenter()
+        presenter?.view = self
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-        imagesListServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ImagesListService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else {return}
-                self.updateTableViewAnimated()
-            }
-        imagesListService.fetchPhotosNextPage()
+        loadImages()
     }
     
     //MARK: - Navigation
@@ -85,7 +83,7 @@ final class ImagesListViewController: UIViewController {
         if photos[indexPath.row].isLiked == true {cell.likeButton.setImage(UIImage(named: "LikeActive"), for: .normal)} else {cell.likeButton.setImage(UIImage(named: "LikeNoActive"), for: .normal)}
     }
     
-    private func updateTableViewAnimated() {
+    func updateTableViewAnimated() {
         let oldCount = photos.count
         let newCount = imagesListService.photos.count
         photos = imagesListService.photos
@@ -97,6 +95,12 @@ final class ImagesListViewController: UIViewController {
                 tableView.insertRows(at: indexPath, with: .automatic)
             } completion: { _ in }
         }
+    }
+}
+
+extension ImagesListViewController: ImagesListViewControllerProtocol {
+    func loadImages() {
+        presenter?.loadImages()
     }
 }
 
@@ -144,30 +148,29 @@ extension ImagesListViewController: ImagesListCellDelegate {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let photo = photos[indexPath.row]
         UIBlockingProgressHUD.show()
-        imagesListService.changeLike(id: photo.id, isLiked: !photo.isLiked) { [weak self] result in
+        presenter?.tapLike(id: photo.id, isLiked: !photo.isLiked) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(_):
+            case.success(_):
                 self.photos = self.imagesListService.photos
                 cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
-            case .failure(_):
+            case.failure(_):
                 self.showAlert()
-            }
+        }
             UIBlockingProgressHUD.dismiss()
         }
     }
     
     private func showAlert() {
-        let alert = UIAlertController(
+        let alert = AlertModel(
             title: "Что-то пошло не так(",
             message: "Не удалось поставить лайк",
-            preferredStyle: .alert)
-        alert.addAction(UIAlertAction(
-            title: "Ok",
-            style: .default) { [weak self] _ in
-                self?.dismiss(animated: true)
-            })
-        self.present(alert, animated: true)
+            buttonOneText: "Ok",
+            completionOne: { [weak self] in
+                guard let self = self else { return }
+                self.dismiss(animated: true)},
+        buttonTwoText: nil)
+        AlertPresenter.showAlert(viewController: self, alertModel: alert)
     }
 }
 
