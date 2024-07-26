@@ -2,9 +2,9 @@
 
 ImageFeed - многостраничное приложение предназначеное для просмотра изображений через API Unsplash.
 
-- [Описание приложения](https://github.com/FilTon87/ImageFeed/new/main?filename=README.md#описание-приложения)
-- [Технологии](https://github.com/FilTon87/ImageFeed/new/main?filename=README.md#технологии)
-- [Скриншоты](https://github.com/FilTon87/ImageFeed/new/main?filename=README.md#скриншоты)
+- [Описание приложения](https://github.com/FilTon87/ImageFeed/tree/main#описание-приложения)
+- [Технологии](https://github.com/FilTon87/ImageFeed/tree/main#технологии)
+- [Скриншоты](https://github.com/FilTon87/ImageFeed/tree/main#скриншоты)
 
 ## **Описание приложения**
 В приложении реализована авторизация через OAuth Unsplash.
